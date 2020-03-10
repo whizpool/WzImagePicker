@@ -66,134 +66,35 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
         super.viewDidLoad()
         
         
-        /// CODE FOR ALBUMS TAB
-        /**************************************************************************************/
-        
-        
-        let smartAlbum = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
-        //let userAlbum  = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: nil)
-        
-        let fetchResult = [smartAlbum] // , userAlbum
-        for result in fetchResult
-        {
-            result.enumerateObjects({(collection, index, object) in
-                
-                let fetchOptions                = PHFetchOptions()
-                fetchOptions.sortDescriptors    = [NSSortDescriptor(key: "creationDate", ascending: false)]
-                
-                if (self.selectedType != nil)
-                {
-                    fetchOptions.predicate = NSPredicate(format: "mediaType == \(self.selectedType?.rawValue ?? 1)")
-                }
-                else
-                {
-                    fetchOptions.predicate = NSPredicate(format: "mediaType = %d || mediaType = %d", PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue)
-                }
-                
-                let photoInAlbum                = PHAsset.fetchAssets(in: collection, options: fetchOptions)
-                
-                if self.selectAllAlbum
-                {
-                    if photoInAlbum.count != 0
-                    {
-                        self.assestsCollection.append(collection)
+        let status = PHPhotoLibrary.authorizationStatus()
+
+        if (status == PHAuthorizationStatus.authorized) {
+            self.getData()
+        }
+
+        else if (status == PHAuthorizationStatus.denied) {
+            self.openAppSettingAlert()
+        }
+
+        else if (status == PHAuthorizationStatus.notDetermined) {
+
+            // Access has not been determined.
+            PHPhotoLibrary.requestAuthorization({ (newStatus) in
+
+                if (newStatus == PHAuthorizationStatus.authorized) {
+                    DispatchQueue.main.async {
+                        self.getData()
                     }
                 }
                 else
                 {
-                    if collection.localizedTitle == "Recently Deleted"
-                    {
-                         return
+                    DispatchQueue.main.async {
+                        self.dismiss(animated: true, completion: nil)
                     }
-                    else
-                    {
-                        if photoInAlbum.count != 0
-                        {
-                            self.assestsCollection.append(collection)
-                        }
-                    }
+                   
                 }
             })
         }
-        
-        /// CODE FOR PICTURES TAB
-        /**************************************************************************************/
-        
-        //        activityIndicator.startAnimating()
-        picturesView.isHidden   = true
-        doneBarButton.isEnabled =  false
-        PHPhotoLibrary.requestAuthorization { (status) in
-            switch status {
-            case .authorized:
-                let fetchOptions             = PHFetchOptions()
-                fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-                if (self.selectedType != nil)
-                {
-                    fetchOptions.predicate = NSPredicate(format: "mediaType == \(self.selectedType?.rawValue ?? 1)")
-                }
-                else
-                {
-                    fetchOptions.predicate = NSPredicate(format: "mediaType = %d || mediaType = %d", PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue)
-                }
-                
-                if (self.selectedType != nil)
-                {
-                    if self.selectedType?.rawValue == 1
-                    {
-                        self.allPhotos = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-                    }
-                    else
-                    {
-                        self.allPhotos = PHAsset.fetchAssets(with: .video, options: fetchOptions)
-                    }
-                }
-                else
-                {
-                    self.allPhotos = PHAsset.fetchAssets(with: fetchOptions)
-                }
-                
-                //                if let photos = self.allPhotos
-                //                {
-                //                    if photos.count > self.pagePerMedia
-                //                    {
-                //                        self.totalCountReq = photos.count / self.pagePerMedia
-                //                    }
-                //                    else
-                //                    {
-                //                        self.totalCountReq = 0
-                //                    }
-                //                    self.getMediaInChunks()
-                //                }
-                //                    for number in 0..<photos.count
-                //                    {
-                //                        if let val = self.selectedIndex[number]
-                //                        {
-                //                            self.selectedIndex[number] = val
-                //                        }
-                //                        else
-                //                        {
-                //                            self.selectedIndex[number] = false
-                //                        }
-                //
-                //                        let assest = photos[number]
-                //                        let image  = CustomMethods.getAssetThumbnail(asset: assest)
-                //                        self.imagesAndAssestForAllPhotots[assest.localIdentifier] = image
-                //                    }
-                //                }
-                //
-                DispatchQueue.main.async {
-                    self.collectionviewPictures.reloadData()
-                }
-                
-            case .denied, .restricted:
-                print("Not allowed")
-                break;
-            case .notDetermined:
-                print("Not determined yet")
-                break;
-            }
-        }
-        
         /// customise UI changes according to set
         /**************************************************************************************/
         
@@ -386,7 +287,156 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
             collectionviewPictures.reloadData()
         }
     }
+    /**************************************************************************************/
+    // MARK: -  ---------------- Methods ---------------
+    /**************************************************************************************/
+    func openAppSettingAlert()
+    {
+     DispatchQueue.main.async(execute: { [unowned self] in
+         let message = NSLocalizedString("WzImagepicker doesn't have permission to use the Gallery, please change privacy settings", comment: "Alert message when the user has denied access to the Microphone")
+         let alertController = UIAlertController(title: "WzImagepicker", message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment: "ok button to Cancel Settings"), style: .default, handler: { action in
+                self.dismiss(animated: true, completion: nil)
+         }))
+         alertController.addAction(UIAlertAction(title: NSLocalizedString("Settings", comment: "Alert button to open Settings"), style: .default, handler: { action in
+            
+                 if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                     UIApplication.shared.open(appSettings)
+             }
+         }))
+         self.present(alertController, animated: true, completion: nil)
+     })
+    }
     
+    func getData()
+    {
+        /// CODE FOR ALBUMS TAB
+             /**************************************************************************************/
+        let smartAlbum = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
+        //let userAlbum  = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: nil)
+        
+        let fetchResult = [smartAlbum] // , userAlbum
+        for result in fetchResult
+        {
+            result.enumerateObjects({(collection, index, object) in
+                
+                let fetchOptions                = PHFetchOptions()
+                fetchOptions.sortDescriptors    = [NSSortDescriptor(key: "creationDate", ascending: false)]
+                
+                if (self.selectedType != nil)
+                {
+                    fetchOptions.predicate = NSPredicate(format: "mediaType == \(self.selectedType?.rawValue ?? 1)")
+                }
+                else
+                {
+                    fetchOptions.predicate = NSPredicate(format: "mediaType = %d || mediaType = %d", PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue)
+                }
+                
+                let photoInAlbum                = PHAsset.fetchAssets(in: collection, options: fetchOptions)
+                
+                if self.selectAllAlbum
+                {
+                    if photoInAlbum.count != 0
+                    {
+                        self.assestsCollection.append(collection)
+                    }
+                }
+                else
+                {
+                    if collection.localizedTitle == "Recently Deleted"
+                    {
+                        return
+                    }
+                    else
+                    {
+                        if photoInAlbum.count != 0
+                        {
+                            self.assestsCollection.append(collection)
+                        }
+                    }
+                }
+            })
+        }
+        
+        /// CODE FOR PICTURES TAB
+        /**************************************************************************************/
+        
+        //        activityIndicator.startAnimating()
+        picturesView.isHidden   = true
+        doneBarButton.isEnabled =  false
+        PHPhotoLibrary.requestAuthorization { (status) in
+            switch status {
+            case .authorized:
+                let fetchOptions             = PHFetchOptions()
+                fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+                if (self.selectedType != nil)
+                {
+                    fetchOptions.predicate = NSPredicate(format: "mediaType == \(self.selectedType?.rawValue ?? 1)")
+                }
+                else
+                {
+                    fetchOptions.predicate = NSPredicate(format: "mediaType = %d || mediaType = %d", PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue)
+                }
+                
+                if (self.selectedType != nil)
+                {
+                    if self.selectedType?.rawValue == 1
+                    {
+                        self.allPhotos = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+                    }
+                    else
+                    {
+                        self.allPhotos = PHAsset.fetchAssets(with: .video, options: fetchOptions)
+                    }
+                }
+                else
+                {
+                    self.allPhotos = PHAsset.fetchAssets(with: fetchOptions)
+                }
+                
+                //                if let photos = self.allPhotos
+                //                {
+                //                    if photos.count > self.pagePerMedia
+                //                    {
+                //                        self.totalCountReq = photos.count / self.pagePerMedia
+                //                    }
+                //                    else
+                //                    {
+                //                        self.totalCountReq = 0
+                //                    }
+                //                    self.getMediaInChunks()
+                //                }
+                //                    for number in 0..<photos.count
+                //                    {
+                //                        if let val = self.selectedIndex[number]
+                //                        {
+                //                            self.selectedIndex[number] = val
+                //                        }
+                //                        else
+                //                        {
+                //                            self.selectedIndex[number] = false
+                //                        }
+                //
+                //                        let assest = photos[number]
+                //                        let image  = CustomMethods.getAssetThumbnail(asset: assest)
+                //                        self.imagesAndAssestForAllPhotots[assest.localIdentifier] = image
+                //                    }
+                //                }
+                //
+                DispatchQueue.main.async {
+                    self.collectionviewPictures.reloadData()
+                    self.collectionViewAlbums.reloadData()
+                }
+                
+            case .denied, .restricted:
+                print("Not allowed")
+                break;
+            case .notDetermined:
+                print("Not determined yet")
+                break;
+            }
+        }
+    }
     /**************************************************************************************/
     // MARK: -  ---------------- Actions ---------------
     /**************************************************************************************/
