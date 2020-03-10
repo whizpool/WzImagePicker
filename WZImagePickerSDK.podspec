@@ -11,13 +11,13 @@ Pod::Spec.new do |s|
     s.license               = { :type => "MIT", :file => "LICENSE" }
     
     
-    s.author                = { "Whizpool" => "naeem.hussain@whizpool.com" }
+    s.author                = { "Whizpool" => "whizpool" }
     
-    s.homepage              = "https://github.com/hussainnaeem702/wzImagePicker"
+    s.homepage              = "https://github.com/whizpool/WzImagePicker.git"
     
     
     s.source                = {
-    :git => "https://github.com/hussainnaeem702/wzImagePicker.git",
+    :git => "https://github.com/whizpool/WzImagePicker.git",
     :tag => "#{s.version}"
     }
     
