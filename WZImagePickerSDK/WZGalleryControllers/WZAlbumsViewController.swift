@@ -293,8 +293,8 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
     func openAppSettingAlert()
     {
      DispatchQueue.main.async(execute: { [unowned self] in
-         let message = NSLocalizedString("WzImagepicker doesn't have permission to use the Gallery, please change privacy settings", comment: "Alert message when the user has denied access to the Microphone")
-         let alertController = UIAlertController(title: "WzImagepicker", message: message, preferredStyle: .alert)
+         let message = NSLocalizedString("App doesn't have permission to use the Gallery, please change privacy settings", comment: "Alert message when the user has denied access to the Microphone")
+         let alertController = UIAlertController(title: "Galley Access", message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment: "ok button to Cancel Settings"), style: .default, handler: { action in
                 self.dismiss(animated: true, completion: nil)
          }))
