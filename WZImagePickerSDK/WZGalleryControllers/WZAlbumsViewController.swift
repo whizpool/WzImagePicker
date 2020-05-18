@@ -27,6 +27,8 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     /// declarations for customisation of UI
     var backgroundColor                 : UIColor?              = nil
+    var barTintColor                    : UIColor?              = nil
+    var tintColor                       : UIColor?              = nil
     var topSectionColor                 : UIColor?              = nil
     var highLightedIndicatorColor       : UIColor?              = nil
     var topButtonsTextColor             : UIColor?              = nil
@@ -34,11 +36,13 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
     var albumsImageBorderColor          : UIColor?              = nil
     var albumsTextColor                 : UIColor?              = nil
     var selectedImageColor              : UIColor?              = nil
+    var selectedImageIcon               : UIImage?              = nil
     var imagesBorderWidth               : CGFloat?              = nil
     var albumsBorderCorners             : CGFloat?              = nil
-    var imagesCorners                   : CGFloat?              = nil
+    var albumPreviewCorners             : CGFloat?              = nil
+    var pictureCorners                  : CGFloat?              = nil
     var selectedType                    : SelectedMediaType?    = nil
-    var selectionType                   : SelectionType?        = SelectionType.multipleSelection
+    var selectionType                   : SelectionType?        = SelectionType.singleImageSelection
     var selectAllAlbum                  : Bool                  = false
     /**************************************************************************************/
     // MARK: -  --------------------------- Outlets ------------------------------
@@ -55,8 +59,13 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet weak var backgorundView               : UIView!
     @IBOutlet weak var topSectionView               : UIView!
     @IBOutlet weak var highLightedIndicatorView     : UIView!
-    @IBOutlet weak var doneBarButton                : UIBarButtonItem!
-    @IBOutlet weak var cancelBarButton              : UIBarButtonItem!
+    //@IBOutlet weak var doneBarButton                : UIBarButtonItem!
+    //@IBOutlet weak var cancelBarButton              : UIBarButtonItem!
+    //@IBOutlet var navigationBar                     : UINavigationBar!
+    
+    private let albumsPerRow: CGFloat = 2
+    private let sectionInsetsAlbums = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
+    private let sectionInsetsPictures = UIEdgeInsets(top: 3.0, left: 3.0, bottom: 2.0, right: 3.0)
     
     /**************************************************************************************/
     // MARK: -  -------------------------- View Controllers life Cycle --------------------
@@ -65,6 +74,9 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        albumsView.isHidden   = false
+        picturesView.isHidden = true
+        updateDoneButtonState()
         
         let status = PHPhotoLibrary.authorizationStatus()
 
@@ -119,18 +131,46 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
             picturesButton.setTitleColor(topButtonsTextColor, for: .normal)
         }
         
+        if (barTintColor != nil)
+        {
+            UINavigationBar.appearance().barTintColor = barTintColor
+        }
         
-        /// customise UI changes according to set
-        /**************************************************************************************/
-        
-        //        collectionviewPictures.register(UINib(nibName: "WZAssestCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "WZAssestCollectionViewCell")
-        //        collectionViewAlbums.register(UINib(nibName: "WZAlbumCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "WZAlbumCollectionViewCell")
+        if (tintColor != nil)
+        {
+            // To change colour of tappable items.
+            UINavigationBar.appearance().tintColor = tintColor
+        }
     }
     
     /**************************************************************************************/
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+    }
+    
+    func updateDoneButtonState() {
+        
+        if (!picturesView.isHidden)
+        {
+            if (selectedImagesIndex.count > 0)
+            {
+                if (self.navigationItem.rightBarButtonItem == nil)
+                {
+                    let doneBarButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneBarButtonTapped))
+                    self.navigationItem.rightBarButtonItem = doneBarButton
+                }
+            }
+            else
+            {
+                self.navigationItem.rightBarButtonItem = nil
+            }
+        }
+        else
+        {
+            self.navigationItem.rightBarButtonItem = nil
+        }
+        
     }
     
     /**************************************************************************************/
@@ -186,20 +226,20 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
 //            if (albumsImageBorderColor != nil)
 //            {
 //                cell.albumImageBackground.backgroundColor = UIColor.clear
-//                cell.imageview2.layer.borderColor   = albumsImageBorderColor?.cgColor
+//                cell.imagePreview.layer.borderColor   = albumsImageBorderColor?.cgColor
 //            }
             
             if (imagesBorderWidth != nil)
             {
-                cell.imageview2.layer.borderWidth   = imagesBorderWidth!
+                cell.imagePreview.layer.borderWidth   = imagesBorderWidth!
                 //cell.albumImageBackground.layer.borderWidth = imagesBorderWidth!
             }
             
-            if (imagesCorners != nil)
+            if (albumPreviewCorners != nil)
             {
                 //cell.albumImageBackground.layer.cornerRadius = albumsBorderCorners!
                 //cell.albumImageBackground.layer.borderWidth = albumsBorderCorners
-                cell.imageview2.layer.cornerRadius   = imagesCorners!
+                cell.imagePreview.layer.cornerRadius   = albumPreviewCorners!
             }
             
             return cell
@@ -209,30 +249,42 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
             /// collection view Images
             /**************************************************************************************/
             
-            let cell                = collectionView.dequeueReusableCell(withReuseIdentifier: "WZAssestCollectionViewCell", for: indexPath) as! WZAssestCollectionViewCell
-            let assest              = allPhotos?[indexPath.item]
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WZAssestCollectionViewCell", for: indexPath) as! WZAssestCollectionViewCell
+            let assest = allPhotos?[indexPath.item]
             
             if selectedImagesIndex.contains(indexPath.item)
             {
-                var selectColor = UIColor()
-                if selectedImageColor != nil
+                if (selectedImageIcon != nil)
                 {
-                    selectColor = selectedImageColor!
+                    cell.selectedIconImageView.image = selectedImageIcon
+                    cell.selectedIconImageView.isHidden = false
+                    cell.selectedAlphaView.isHidden = false
                 }
                 else
                 {
-                    selectColor = .blue
+                    var selectColor = UIColor()
+                    if selectedImageColor != nil
+                    {
+                        selectColor = selectedImageColor!
+                    }
+                    else
+                    {
+                        selectColor = .blue
+                    }
+                    cell.selectedIconImageView.tintColor = selectColor
+                    cell.selectedIconImageView.isHidden = false
+                    cell.selectedAlphaView.isHidden = false
                 }
-                cell.selectedIndicator.backgroundColor = selectColor
             }
             else
             {
-                cell.selectedIndicator.backgroundColor = UIColor.white
+                cell.selectedIconImageView.isHidden = true
+                cell.selectedAlphaView.isHidden = true
             }
             
-            if (imagesCorners != nil)
+            if (pictureCorners != nil)
             {
-                cell.imageView.layer.cornerRadius   = imagesCorners!
+                cell.imageView.layer.cornerRadius   = pictureCorners!
             }
             
             cell.populateCellDataWithAssets(assest)
@@ -258,20 +310,24 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
             assestVc.albumTitle         = assestsCollection[indexPath.item].localizedTitle ?? ""
             assestVc.phassetCollection  = assestsCollection[indexPath.item]
             assestVc.backgroundColor    = backgroundColor
-            assestVc.imagesCorners      = imagesCorners
+            assestVc.imagesCorners      = albumPreviewCorners
             assestVc.selectedImageColor = selectedImageColor
+            assestVc.selectedImageIcon  = selectedImageIcon
             assestVc.selectedMediaType  = self.selectedType?.rawValue
             assestVc.delegate           = self
             assestVc.selectionType      = selectionType
             
-            self.present(assestVc, animated: true, completion: nil)
-            //            self.navigationController?.pushViewController(assestVc, animated: true)
+            //self.present(assestVc, animated: true, completion: nil)
+            self.navigationController?.pushViewController(assestVc, animated: true)
         }
         else
         {
-            if selectionType == SelectionType.singleSelection
+            if selectionType == SelectionType.singleImageSelection
             {
-                selectedImagesIndex = [indexPath.item]
+                if let assest = allPhotos?[indexPath.item]
+                {
+                    delegate?.didFinishSelection([assest])
+                }
             }
             else
             {
@@ -283,45 +339,56 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
                 {
                     selectedImagesIndex.append(indexPath.item)
                 }
+                
+                collectionviewPictures.reloadData()
+                
+                updateDoneButtonState()
             }
-            collectionviewPictures.reloadData()
         }
     }
+    
     /**************************************************************************************/
     // MARK: -  ---------------- Methods ---------------
     /**************************************************************************************/
     func openAppSettingAlert()
     {
-     DispatchQueue.main.async(execute: { [unowned self] in
-         let message = NSLocalizedString("App doesn't have permission to use the Gallery, please change privacy settings", comment: "Alert message when the user has denied access to the Microphone")
-         let alertController = UIAlertController(title: "Gallery Access", message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment: "ok button to Cancel Settings"), style: .default, handler: { action in
-                self.dismiss(animated: true, completion: nil)
-         }))
-         alertController.addAction(UIAlertAction(title: NSLocalizedString("Settings", comment: "Alert button to open Settings"), style: .default, handler: { action in
+        DispatchQueue.main.async(execute: { [unowned self] in
             
+            let message = NSLocalizedString("App doesn't have permission to use the Gallery, please change privacy settings", comment: "Alert message when the user has denied access to the Microphone")
+            let alertController = UIAlertController(title: "Gallery Access", message: message, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment: "ok button to Cancel Settings"), style: .default, handler: { action in
+                    self.dismiss(animated: true, completion: nil)
+             }))
+            alertController.addAction(UIAlertAction(title: NSLocalizedString("Settings", comment: "Alert button to open Settings"), style: .default, handler: { action in
+
                  if let appSettings = URL(string: UIApplication.openSettingsURLString) {
                      UIApplication.shared.open(appSettings)
              }
-         }))
-         self.present(alertController, animated: true, completion: nil)
-     })
+            }))
+            self.present(alertController, animated: true, completion: nil)
+                    
+        })
     }
     
     func getData()
     {
+        
         /// CODE FOR ALBUMS TAB
              /**************************************************************************************/
-        let smartAlbum = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
+        //let smartAlbum = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
         //let userAlbum  = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: nil)
         
-        let fetchResult = [smartAlbum] // , userAlbum
+        let smartAlbum = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil)
+        let userAlbum  = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: nil)
+        
+        //let fetchResult = [smartAlbum] // , userAlbum
+        let fetchResult = [smartAlbum, userAlbum]
         for result in fetchResult
         {
             result.enumerateObjects({(collection, index, object) in
                 
                 let fetchOptions                = PHFetchOptions()
-                fetchOptions.sortDescriptors    = [NSSortDescriptor(key: "creationDate", ascending: false)]
+                //fetchOptions.sortDescriptors    = [NSSortDescriptor(key: "creationDate", ascending: false)]
                 
                 if (self.selectedType != nil)
                 {
@@ -361,14 +428,13 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
         /// CODE FOR PICTURES TAB
         /**************************************************************************************/
         
-        //        activityIndicator.startAnimating()
-        picturesView.isHidden   = true
-        doneBarButton.isEnabled =  false
         PHPhotoLibrary.requestAuthorization { (status) in
             switch status {
+                
             case .authorized:
-                let fetchOptions             = PHFetchOptions()
-                fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+                
+                let fetchOptions = PHFetchOptions()
+                //fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
                 if (self.selectedType != nil)
                 {
                     fetchOptions.predicate = NSPredicate(format: "mediaType == \(self.selectedType?.rawValue ?? 1)")
@@ -434,6 +500,9 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
             case .notDetermined:
                 print("Not determined yet")
                 break;
+            @unknown default:
+                print("default")
+                break;
             }
         }
     }
@@ -445,7 +514,9 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
     {
         picturesView.isHidden = true
         albumsView.isHidden   = false
-        doneBarButton.isEnabled =  false
+        //doneBarButton.isEnabled =  false
+        updateDoneButtonState()
+        
         UIView.animate(withDuration: 0.3) {
             self.leadingConstOfHighLightedView.constant = 0
             self.view.layoutIfNeeded()
@@ -459,7 +530,8 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
     {
         picturesView.isHidden = false
         albumsView.isHidden   = true
-        doneBarButton.isEnabled =  true
+        //doneBarButton.isEnabled =  true
+        updateDoneButtonState()
         
         UIView.animate(withDuration: 0.3) {
             self.leadingConstOfHighLightedView.constant = self.albumsButton.bounds.width
@@ -482,7 +554,7 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
         var imageToTransfer = [PHAsset]()
         for index in selectedImagesIndex
         {
-            if let assest                      = allPhotos?[index]
+            if let assest = allPhotos?[index]
             {
                 imageToTransfer.append(assest)
             }
@@ -513,26 +585,48 @@ class WZAlbumsViewController: UIViewController, UICollectionViewDelegate, UIColl
 extension WZAlbumsViewController : UICollectionViewDelegateFlowLayout
 {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-          if collectionView == collectionViewAlbums
-           {
-               let width  = 200 //some width
-               let height = 200 //ratio
-               return CGSize(width: width, height: height)
-           }
-           else
-           {
-               return CustomMethods.standardSizeOfcollectionviewCell(collectionviewPictures.frame.width)
-           }
-       }
+        
+        if collectionView == collectionViewAlbums
+        {
+            let paddingSpace = sectionInsetsAlbums.left * (albumsPerRow + 1)
+            let availableWidth = view.frame.width - paddingSpace
+            let widthPerItem = availableWidth / albumsPerRow
+
+            return CGSize(width: widthPerItem-2, height: widthPerItem+40)
+        }
+        else
+        {
+            return CustomMethods.getSizeOfcollectionviewCell(collectionviewPictures.frame.width, sectionInsets: sectionInsetsPictures)
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets.zero
+        
+        if collectionView == collectionViewAlbums
+        {
+            return sectionInsetsAlbums
+        }
+        
+        return sectionInsetsPictures
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 3
+        
+        if collectionView == collectionViewAlbums
+        {
+            return sectionInsetsAlbums.left
+        }
+        
+        return sectionInsetsPictures.left
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 3
+        
+        if collectionView == collectionViewAlbums
+        {
+            return sectionInsetsAlbums.left
+        }
+        
+        return sectionInsetsPictures.left
     }
 }

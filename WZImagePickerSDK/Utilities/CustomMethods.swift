@@ -10,10 +10,6 @@
 import Foundation
 import UIKit
 import Photos
-//import Alamofire
-
-
-//let placeHolderImage = UIImage(named: "image-placeholder")!
 
 public enum SelectedMediaType : Int
 {
@@ -23,8 +19,8 @@ public enum SelectedMediaType : Int
 
 public enum SelectionType : String
 {
-    case singleSelection = "1"
-    case multipleSelection = "2"
+    case singleImageSelection = "1"
+    case multiImageSelection = "2"
 }
 
 class CustomMethods: NSObject {
@@ -37,6 +33,20 @@ class CustomMethods: NSObject {
         
         let heighMargin                 = widthOfView * 0.1607
         return CGSize(width: widthOfView, height: widthOfView + heighMargin)
+    }
+    
+    static func getSizeOfcollectionviewCell(_ presentedViewWith : CGFloat, sectionInsets: UIEdgeInsets) -> CGSize
+    {
+        var imagesPerRow = presentedViewWith / 3
+        if (imagesPerRow > 125) {
+            imagesPerRow = 4
+        }
+        
+        let paddingSpace = sectionInsets.left * (imagesPerRow + 1)
+        let availableWidth = presentedViewWith - paddingSpace
+        let widthPerItem = availableWidth / imagesPerRow
+
+        return CGSize(width: widthPerItem-2, height: widthPerItem-2)
     }
     
     static func getAssetThumbnail(asset: PHAsset) -> UIImage

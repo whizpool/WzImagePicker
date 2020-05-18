@@ -22,15 +22,19 @@ public class WZPickerController: NSObject, WzSelectedPictureDelegate {
     
     /// if these variables are nil than use default behaviour
     public var backgroundColor               : UIColor?               = nil /// accessable varibale for set main background color of screen
+    public var barTintColor                  : UIColor?               = nil /// accessable varibale for set bar tint color
+    public var tintColor                     : UIColor?               = nil /// accessable varibale for set tint color
     public var topSelectionButtonColor       : UIColor?               = nil /// accessable varibale for set top button selections backgound color
     public var topHighlightedIndicatorColor  : UIColor?               = nil ///  accessable varibale for set selected button highlight view's color
     public var topButtonTextColor            : UIColor?               = nil ///  accessable varibale for set top selection buttons text color
     public var albumsCellBackgoundColor      : UIColor?               = nil ///  accessable varibale for set each cells backgound color
-    public var albumsImageBorderColors       : UIColor?               = nil ///  accessable varibale for set each cells border color
+//    public var albumsImageBorderColors       : UIColor?               = nil ///  accessable varibale for set each cells border color
     public var albumsTextColor               : UIColor?               = nil ///  accessable varibale for set each cells text color
     public var selectedImageColor            : UIColor?               = nil ///  accessable varibale for set selected images indicator color
+    public var selectedImageIcon             : UIImage?               = nil ///  accessable varibale for set selected images icon
     public var albumsBorderCorners           : CGFloat?               = nil ///  accessable varibale for set each cell border
-    public var imagesCorners                 : CGFloat?               = nil ///  accessable varibale for set images corners
+    public var albumPreviewCorners           : CGFloat?               = nil ///  accessable varibale for set album preview image corners
+    public var pictureCorners                : CGFloat?               = nil ///  accessable varibale for set picture corners
     public var imagesBorderWidth             : CGFloat?               = nil ///  accessable varibale for set images border
     public var selectedMediaType             : SelectedMediaType?     = nil ///  accessable varibale for set media type either video or image if nil than both
     public var selectionType                 : SelectionType?         = nil ///  accessable varibale for set single selection or multiple selection
@@ -52,6 +56,16 @@ public class WZPickerController: NSObject, WzSelectedPictureDelegate {
             wzAlbums.backgroundColor    = backgroundColor
         }
         
+        if (barTintColor != nil)
+        {
+            wzAlbums.barTintColor    = barTintColor
+        }
+        
+        if (tintColor != nil)
+        {
+            wzAlbums.tintColor    = tintColor
+        }
+        
         if (topSelectionButtonColor != nil)
         {
             wzAlbums.topSectionColor    = topSelectionButtonColor
@@ -67,19 +81,24 @@ public class WZPickerController: NSObject, WzSelectedPictureDelegate {
             wzAlbums.albumsCellBackgoundColor    = albumsCellBackgoundColor
         }
         
-        if (albumsImageBorderColors != nil)
-        {
-            wzAlbums.albumsImageBorderColor    = albumsImageBorderColors
-        }
+//        if (albumsImageBorderColors != nil)
+//        {
+//            wzAlbums.albumsImageBorderColor    = albumsImageBorderColors
+//        }
         
         if (albumsBorderCorners != nil)
         {
             wzAlbums.albumsBorderCorners    = albumsBorderCorners
         }
         
-        if (imagesCorners != nil)
+        if (albumPreviewCorners != nil)
         {
-            wzAlbums.imagesCorners    = imagesCorners
+            wzAlbums.albumPreviewCorners    = albumPreviewCorners
+        }
+        
+        if (pictureCorners != nil)
+        {
+            wzAlbums.pictureCorners    = pictureCorners
         }
         
         if (imagesBorderWidth != nil)
@@ -97,6 +116,11 @@ public class WZPickerController: NSObject, WzSelectedPictureDelegate {
             wzAlbums.selectedImageColor    = selectedImageColor
         }
         
+        if (selectedImageIcon != nil)
+        {
+            wzAlbums.selectedImageIcon    = selectedImageIcon
+        }
+        
         if (topButtonTextColor != nil)
         {
             wzAlbums.topButtonsTextColor     = topButtonTextColor
@@ -111,11 +135,13 @@ public class WZPickerController: NSObject, WzSelectedPictureDelegate {
         {
             wzAlbums.selectionType      = selectionType
         }
+        
         wzAlbums.selectAllAlbum = selectAllAlbum
         wzAlbums.delegate = self
         
-        
-        fromController.present(wzAlbums, animated: true, completion: nil)
+        let navController = UINavigationController.init(rootViewController: wzAlbums)
+        fromController.present(navController, animated: true, completion: nil)
+        //fromController.navigationController?.present(navController, animated: true, completion: nil)
     }
     
     /**************************************************************************************/

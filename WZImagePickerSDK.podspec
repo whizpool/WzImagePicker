@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
     s.requires_arc          = true
     
     
-    s.version               = "1.0.0"
+    s.version               = "1.1.0"
     
     s.license               = { :type => "MIT", :file => "LICENSE" }
     
@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
     s.framework             = "Photos"
     
     s.source_files          = "WZImagePickerSDK/**/*.{h,m,swift, xib, storyboard}"
-    s.resources             = 'WZImagePickerSDK/Resources/*.storyboard'
+    s.resources             = 'WZImagePickerSDK/Resources/**/*.{storyboard,xcassets,png}'
     
     s.swift_version         = "4.2"
     

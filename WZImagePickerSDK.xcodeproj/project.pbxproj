@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C5215D2246C0CEC0025BF78 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C5215D1246C0CEC0025BF78 /* Assets.xcassets */; };
 		C2440ED72406947B00F39604 /* WzPicker.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2440ECC2406947B00F39604 /* WzPicker.storyboard */; };
 		C2440ED82406947B00F39604 /* CustomMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2440ECE2406947B00F39604 /* CustomMethods.swift */; };
 		C2440ED92406947B00F39604 /* TopAlignCollectionviewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2440ECF2406947B00F39604 /* TopAlignCollectionviewFlowLayout.swift */; };
@@ -16,22 +17,11 @@
 		C2440EDD2406947B00F39604 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2440ED52406947B00F39604 /* Common.swift */; };
 		C2440EDE2406947B00F39604 /* WZAssestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2440ED62406947B00F39604 /* WZAssestViewController.swift */; };
 		C25143AF23FBCC9300E6B6D8 /* WZImagePickerSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = C25143AD23FBCC9300E6B6D8 /* WZImagePickerSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C25143BE23FBE8F300E6B6D8 /* WZImagePickerSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25143BD23FBE8F300E6B6D8 /* WZImagePickerSDKTests.swift */; };
-		C25143C023FBE8F300E6B6D8 /* WZImagePickerSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C25143AA23FBCC9300E6B6D8 /* WZImagePickerSDK.framework */; };
 		C251440F23FC045600E6B6D8 /* WZImagePickerSDK.podspec in Resources */ = {isa = PBXBuildFile; fileRef = C251440E23FC045600E6B6D8 /* WZImagePickerSDK.podspec */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		C25143C123FBE8F300E6B6D8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C25143A123FBCC9200E6B6D8 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C25143A923FBCC9300E6B6D8;
-			remoteInfo = WZImagePickerSDK;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
+		6C5215D1246C0CEC0025BF78 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C2440ECC2406947B00F39604 /* WzPicker.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = WzPicker.storyboard; sourceTree = "<group>"; };
 		C2440ECE2406947B00F39604 /* CustomMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMethods.swift; sourceTree = "<group>"; };
 		C2440ECF2406947B00F39604 /* TopAlignCollectionviewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopAlignCollectionviewFlowLayout.swift; sourceTree = "<group>"; };
@@ -43,9 +33,6 @@
 		C25143AA23FBCC9300E6B6D8 /* WZImagePickerSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WZImagePickerSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C25143AD23FBCC9300E6B6D8 /* WZImagePickerSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WZImagePickerSDK.h; sourceTree = "<group>"; };
 		C25143AE23FBCC9300E6B6D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C25143BB23FBE8F300E6B6D8 /* WZImagePickerSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WZImagePickerSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		C25143BD23FBE8F300E6B6D8 /* WZImagePickerSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WZImagePickerSDKTests.swift; sourceTree = "<group>"; };
-		C25143BF23FBE8F300E6B6D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C251440E23FC045600E6B6D8 /* WZImagePickerSDK.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WZImagePickerSDK.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -57,20 +44,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C25143B823FBE8F300E6B6D8 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C25143C023FBE8F300E6B6D8 /* WZImagePickerSDK.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		C2440ECB2406947B00F39604 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6C5215D1246C0CEC0025BF78 /* Assets.xcassets */,
 				C2440ECC2406947B00F39604 /* WzPicker.storyboard */,
 			);
 			path = Resources;
@@ -108,7 +88,6 @@
 			isa = PBXGroup;
 			children = (
 				C25143AC23FBCC9300E6B6D8 /* WZImagePickerSDK */,
-				C25143BC23FBE8F300E6B6D8 /* WZImagePickerSDKTests */,
 				C25143AB23FBCC9300E6B6D8 /* Products */,
 				C251440E23FC045600E6B6D8 /* WZImagePickerSDK.podspec */,
 			);
@@ -118,7 +97,6 @@
 			isa = PBXGroup;
 			children = (
 				C25143AA23FBCC9300E6B6D8 /* WZImagePickerSDK.framework */,
-				C25143BB23FBE8F300E6B6D8 /* WZImagePickerSDKTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -134,15 +112,6 @@
 				C2440ED32406947B00F39604 /* WZGalleryControllers */,
 			);
 			path = WZImagePickerSDK;
-			sourceTree = "<group>";
-		};
-		C25143BC23FBE8F300E6B6D8 /* WZImagePickerSDKTests */ = {
-			isa = PBXGroup;
-			children = (
-				C25143BD23FBE8F300E6B6D8 /* WZImagePickerSDKTests.swift */,
-				C25143BF23FBE8F300E6B6D8 /* Info.plist */,
-			);
-			path = WZImagePickerSDKTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,24 +146,6 @@
 			productReference = C25143AA23FBCC9300E6B6D8 /* WZImagePickerSDK.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		C25143BA23FBE8F300E6B6D8 /* WZImagePickerSDKTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = C25143C323FBE8F300E6B6D8 /* Build configuration list for PBXNativeTarget "WZImagePickerSDKTests" */;
-			buildPhases = (
-				C25143B723FBE8F300E6B6D8 /* Sources */,
-				C25143B823FBE8F300E6B6D8 /* Frameworks */,
-				C25143B923FBE8F300E6B6D8 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				C25143C223FBE8F300E6B6D8 /* PBXTargetDependency */,
-			);
-			name = WZImagePickerSDKTests;
-			productName = WZImagePickerSDKTests;
-			productReference = C25143BB23FBE8F300E6B6D8 /* WZImagePickerSDKTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -203,14 +154,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 1130;
-				ORGANIZATIONNAME = Adeel;
+				ORGANIZATIONNAME = Whizpool;
 				TargetAttributes = {
 					C25143A923FBCC9300E6B6D8 = {
 						CreatedOnToolsVersion = 11.3.1;
 						LastSwiftMigration = 1130;
-					};
-					C25143BA23FBE8F300E6B6D8 = {
-						CreatedOnToolsVersion = 11.3.1;
 					};
 				};
 			};
@@ -228,7 +176,6 @@
 			projectRoot = "";
 			targets = (
 				C25143A923FBCC9300E6B6D8 /* WZImagePickerSDK */,
-				C25143BA23FBE8F300E6B6D8 /* WZImagePickerSDKTests */,
 			);
 		};
 /* End PBXProject section */
@@ -239,14 +186,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C251440F23FC045600E6B6D8 /* WZImagePickerSDK.podspec in Resources */,
+				6C5215D2246C0CEC0025BF78 /* Assets.xcassets in Resources */,
 				C2440ED72406947B00F39604 /* WzPicker.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C25143B923FBE8F300E6B6D8 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,23 +208,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C25143B723FBE8F300E6B6D8 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C25143BE23FBE8F300E6B6D8 /* WZImagePickerSDKTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		C25143C223FBE8F300E6B6D8 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C25143A923FBCC9300E6B6D8 /* WZImagePickerSDK */;
-			targetProxy = C25143C123FBE8F300E6B6D8 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		C25143B023FBCC9300E6B6D8 /* Debug */ = {
@@ -459,44 +384,6 @@
 			};
 			name = Release;
 		};
-		C25143C423FBE8F300E6B6D8 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CY33736R3D;
-				INFOPLIST_FILE = WZImagePickerSDKTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = test.WZImagePickerSDKTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		C25143C523FBE8F300E6B6D8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CY33736R3D;
-				INFOPLIST_FILE = WZImagePickerSDKTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = test.WZImagePickerSDKTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -514,15 +401,6 @@
 			buildConfigurations = (
 				C25143B323FBCC9300E6B6D8 /* Debug */,
 				C25143B423FBCC9300E6B6D8 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		C25143C323FBE8F300E6B6D8 /* Build configuration list for PBXNativeTarget "WZImagePickerSDKTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C25143C423FBE8F300E6B6D8 /* Debug */,
-				C25143C523FBE8F300E6B6D8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

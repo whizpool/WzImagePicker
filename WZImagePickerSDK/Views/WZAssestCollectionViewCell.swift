@@ -12,20 +12,16 @@ import Photos
 class WZAssestCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var imageView : UIImageView!
-    @IBOutlet weak var selectedIndicator : UIView!
+    @IBOutlet weak var selectedIconImageView : UIImageView!
+    @IBOutlet weak var selectedAlphaView : UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        
-        selectedIndicator.layer.cornerRadius = selectedIndicator.frame.size.width / 2
-        selectedIndicator.layer.borderWidth  = 1
-        selectedIndicator.layer.borderColor  = UIColor.white.cgColor
     }
 
     func populateCellsData (_ image : UIImage?)
     {
-        //let image       = getAssetThumbnail(asset: assest)
         if let assestImage = image
         {
             imageView.image = assestImage
